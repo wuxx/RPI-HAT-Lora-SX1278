@@ -1,5 +1,9 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 
 #include "sx1278.h"
 
@@ -11,17 +15,26 @@ extern int client_echo_main();
 
 uint32_t mode;
 
-int main()
+int main(int argc, char **argv)
 {
     sx1278_init();
 
-    if(mode) {
+    if (argc != 2) {
+        fprintf(stderr, "usage: %s [server|client]\r\n", argv[0]);
+        exit(-1);
+    }
+
+    if (strcmp(argv[1], "server") == 0) {
         printf("server start\r\n");
         server_echo_main();
-    } else {
+    } else if (strcmp(argv[1], "client") == 0) {
         printf("client start\r\n");
         client_echo_main();
+    } else {
+        fprintf(stderr, "invalid arg [%s]\n", argv[1]);
+        exit(-1);
     }
+
 
     return 0;
 }

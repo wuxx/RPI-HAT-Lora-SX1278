@@ -3,7 +3,8 @@
 #include "common.h"
 #include "sx1278.h"
 
-static uint8_t frame_data[1024];
+static uint8_t frame_data_s[1024];
+static uint8_t frame_data_r[1024];
 
 int server_echo_main()
 {
@@ -12,9 +13,9 @@ int server_echo_main()
     uint32_t slen;
 
     while (1) {
-        r = sx1278_recv(frame_data, sizeof(frame_data));
+        r = sx1278_recv(frame_data_r, sizeof(frame_data_r));
         if (r > 0) {
-            f = (struct frame_head *)frame_data;
+            f = (struct frame_head *)frame_data_r;
 
             DUMP_VAR2(f->addr);
             DUMP_VAR1(f->channel);
